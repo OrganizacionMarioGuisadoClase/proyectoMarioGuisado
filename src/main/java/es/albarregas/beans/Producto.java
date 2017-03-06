@@ -1,5 +1,6 @@
 package es.albarregas.beans;
 
+import es.albarregas.daofactory.DAOFactory;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,10 @@ public class Producto implements Serializable{
     private Marca marca;
     private ArrayList<Imagen> imagenes;
     private ArrayList<Caractprod> caracteristicas;
-
+    
+    private ArrayList<Producto> productosOferta;
+    private ArrayList<Producto> productosVendidos;
+    
     /**
      * @return the idProducto
      */
@@ -246,6 +250,22 @@ public class Producto implements Serializable{
      */
     public void setCaracteristicas(ArrayList<Caractprod> caracteristicas) {
         this.caracteristicas = caracteristicas;
+    }
+
+    
+    
+    /**
+     * @return the productosOferta
+     */
+    public ArrayList<Producto> getProductosOferta() {
+        return DAOFactory.getDAOFactory().getProductoDAO().getProductos("WHERE p.Oferta = 's' AND p.FueraCatalogo = 'n' GROUP BY IdProducto LIMIT 5");
+    }
+
+    /**
+     * @return the productosVendidos
+     */
+    public ArrayList<Producto> getProductosVendidos() {
+        return DAOFactory.getDAOFactory().getProductoDAO().getProductos("INNER JOIN lineaspedidos AS l USING(IdProducto) WHERE p.FueraCatalogo = 'n' GROUP BY IdProducto LIMIT 6");
     }
 
     

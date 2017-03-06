@@ -29,8 +29,7 @@ public class ProductoDAO implements IProductoDAO{
         try {
             
             preparada = ConnectionFactory.getConnection().prepareStatement("SELECT * FROM productos AS p INNER JOIN imagenes USING(IdProducto) INNER JOIN categorias AS c USING(IdCategoria) INNER JOIN marcas AS m USING(IdMarca) " + where + ";");
-            resultado = preparada.executeQuery();            
-            
+            resultado = preparada.executeQuery();  
             while(resultado.next()){
                 if(idProducto!=resultado.getInt("p.IdProducto")){
                     if(producto!=null){                        
@@ -80,7 +79,6 @@ public class ProductoDAO implements IProductoDAO{
                 productos.add(producto);
             }
         } catch (SQLException ex) {
-            System.out.println("Error al crear sentencia");
             ex.printStackTrace();
         }
 

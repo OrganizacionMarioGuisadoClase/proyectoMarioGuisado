@@ -39,11 +39,11 @@
                             <a href="${sessionScope.path}/jsp/formularioEntrada.jsp" class="enlace">Entrar o Registro<img class="icono-cabecera" src="${sessionScope.path}/img/imagenes/user.png" alt="Usuario"/></a>
                         </c:when>
                         <c:when test="${sessionScope.USUARIO!=null}">
-                            <a href="${sessionScope.path}/jsp/administrarCuenta.jsp" class="enlace">Mi Cuenta<img class="icono-cabecera" src="${sessionScope.path}/img/imagenes/user.png" alt="Usuario"/></a>
+                            <a href="${sessionScope.path}/jsp/cuentaUsuario.jsp" class="enlace">Mi Cuenta<img class="icono-cabecera" src="${sessionScope.path}/img/imagenes/user.png" alt="Usuario"/></a>
                         </c:when>                            
                     </c:choose>
                 </div>
-                <c:if test="${sessionScope.USUARIO!=null}">
+                <c:if test="${sessionScope.USUARIO.tipo == 'u'.charAt(0)}">
                     <div class="col-xd-6 col-md-2 text-center">
                         <a href="" class="enlace">Carrito<img class="icono-cabecera" src="${sessionScope.path}/img/imagenes/carrito.png" alt="Carrito"/></a>
                     </div>

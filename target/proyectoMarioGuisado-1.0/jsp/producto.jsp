@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <jsp:include page="comun/cabecera.jsp"/>
 <div class="container">
-    
+
     <header class="page-header container-fluid cabecera-seccion">
         <h2 class="titulo"><c:out value="${producto.denominacion}"/></h2>
     </header>
@@ -36,12 +36,22 @@
             <dl class="dl-horizontal">
                 <dt>Descripci&oacute;n:</dt><dd>${producto.descripcion}</dd>
                 <dt>Marca:</dt><dd><a class="enlace" href="Peticion?peticion=listaProductos&campo=marca&marca=${producto.idMarca}">${producto.marca.denominacion}</a></dd>
-                <dt>Precio:</dt><dd><p class="productos-item-precio"><fmt:formatNumber value="${producto.precioUnitario}"/> &euro;</p></dd>
+                <dt>Precio:</dt><dd><label class="precio"><fmt:formatNumber type="currency" value="${producto.precioUnitario}"/></label></dd>
+                    <c:if test="${sessionScope.USUARIO.tipo == 'u'.charAt(0)}">
+                        <c:choose>
+                            <c:when test="${producto.stock > 0}">
+                                <dd><button class="btn btn-default">A&ntilde;adir al Carrito</button></dd>
+                            </c:when>
+                            <c:when test="${producto.stock == 0}">
+                                <dd><h4>AGOTADO</h4></dd>
+                            </c:when>
+                        </c:choose>
+                    </c:if>
             </dl>
         </div>                
     </div>
-            
-            
+
+
     <div>
         <table class="table table-bordered">
             <caption><h4>Caracter&iacute;sticas:</h4></caption>

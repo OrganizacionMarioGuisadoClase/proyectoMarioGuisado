@@ -27,40 +27,47 @@ public class ControlUsuario extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         String where = "";
         String salida = "";
         IUsuarioDAO usuariodao = DAOFactory.getDAOFactory().getUsuarioDAO();
         ArrayList<Usuario> usuarios;
         Usuario usuario;
-        
+
         switch (request.getParameter("opcion")) {
             case "entrar":
-                where = "inner join clientes on IdUsuario=IdCliente where Email = '"+request.getParameter("email")+"' and Clave = password('"+ request.getParameter("password")+"')";
+                where = "inner join clientes on IdUsuario=IdCliente where Email = '" + request.getParameter("email") + "' and Clave = password('" + request.getParameter("password") + "') and Bloqueado='n'";
                 usuarios = usuariodao.getUsuarios(where);
-                if(usuarios.isEmpty()){
+                if (usuarios.isEmpty()) {
                     salida = "/jsp/formularioEntrada.jsp";
                     request.setAttribute("errorEntrada", "Usuario o contraseña incorrectos");
-                }else{
+                } else {
                     usuario = usuarios.get(0);
                     HttpSession sesion = request.getSession(true);
                     sesion.setAttribute("USUARIO", usuario);
                 }
                 break;
             case "registro":
-                usuario = new Usuario();
-                usuario.setEmail(request.getParameter("email"));
-                usuario.setClave(request.getParameter("password"));
-                String resultado = usuariodao.anadirUsuario(usuario);
-                if(resultado.equals("error")){
+                where = "inner join clientes on IdUsuario=IdCliente where Email = '" + request.getParameter("email") + "'";
+                usuarios = usuariodao.getUsuarios(where);
+                if (usuarios.isEmpty()) {
+                    usuario = new Usuario();
+                    usuario.setEmail(request.getParameter("email"));
+                    usuario.setClave(request.getParameter("password"));
+                    String resultado = usuariodao.anadirUsuario(usuario);
+                    if (resultado.equals("error")) {
+                        salida = "/jsp/formularioEntrada.jsp";
+                        request.setAttribute("errorRegistro", "El Email introducido ya esta dado de alta");
+                    } else {
+                        salida = "";
+                        where = "inner join clientes on IdUsuario=IdCliente where Email = '" + request.getParameter("email") + "' and Clave = password('" + request.getParameter("password") + "')";
+                        usuario = usuariodao.getUsuarios(where).get(0);
+                        HttpSession sesion = request.getSession(true);
+                        sesion.setAttribute("USUARIO", usuario);
+                    }
+                } else {
                     salida = "/jsp/formularioEntrada.jsp";
                     request.setAttribute("errorRegistro", "El Email introducido ya esta dado de alta");
-                }else{
-                    salida = "";
-                    where = "inner join clientes on IdUsuario=IdCliente where Email = '"+request.getParameter("email")+"' and Clave = password('"+ request.getParameter("password")+"')";
-                    usuario = usuariodao.getUsuarios(where).get(0);
-                    HttpSession sesion = request.getSession(true);
-                    sesion.setAttribute("USUARIO", usuario);
                 }
                 break;
         }

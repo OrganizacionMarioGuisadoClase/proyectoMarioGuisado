@@ -3,17 +3,17 @@
         <div class="col-md-4">
             <h4>Cont&aacute;ctanos</h4><br/>
             <div class="row">
-                <div class="col-md-3">
-                    <a href="https://www.facebook.com/"><img src="${sessionScope.path}/img/imagenes/fb.png"/></a>
+                <div class="col-md-3 col-xs-3">
+                    <a href="https://www.facebook.com/"><img src="${sessionScope.path}/img/imagenes/fb.png" class="img-responsive"/></a>
                 </div>
-                <div class="col-md-3">
-                    <a href="https://www.twitter.com/"><img src="${sessionScope.path}/img/imagenes/twitter.png"/></a>
+                <div class="col-md-3 col-xs-3">
+                    <a href="https://www.twitter.com/"><img src="${sessionScope.path}/img/imagenes/twitter.png" class="img-responsive"/></a>
                 </div>
-                <div class="col-md-3">
-                    <a href="https://www.plus.google.com/"><img src="${sessionScope.path}/img/imagenes/google.png"/></a>
+                <div class="col-md-3 col-xs-3">
+                    <a href="https://www.plus.google.com/"><img src="${sessionScope.path}/img/imagenes/google.png" class="img-responsive"/></a>
                 </div>
-                <div class="col-md-3">
-                    <a href="https://www.youtube.com/"><img src="${sessionScope.path}/img/imagenes/youtube.png"/></a>
+                <div class="col-md-3 col-xs-3">
+                    <a href="https://www.youtube.com/"><img src="${sessionScope.path}/img/imagenes/youtube.png" class="img-responsive"/></a>
                 </div>
             </div>
         </div>

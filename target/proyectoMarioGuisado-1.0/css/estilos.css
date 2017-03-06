@@ -96,6 +96,11 @@ ul.nav li.dropdown:target ul.dropdown-menu a{
     right: 20%;
 }
 
+.precio{
+    color: #fe0000;
+    font-size: 20px;
+}
+
 .icono-cabecera{
     margin-left: 10px;
     max-width: 30px;

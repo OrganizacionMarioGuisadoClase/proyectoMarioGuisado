@@ -2,9 +2,7 @@ package es.albarregas.controladores;
 
 import es.albarregas.beans.Categoria;
 import es.albarregas.beans.Producto;
-import es.albarregas.beans.Imagen;
 import es.albarregas.dao.ICategoriaDAO;
-import es.albarregas.dao.IImagenDAO;
 import es.albarregas.dao.IProductoDAO;
 import es.albarregas.daofactory.DAOFactory;
 import java.io.IOException;
@@ -42,30 +40,6 @@ public class PeticionAjax extends HttpServlet {
                     respuesta = "[";
                     for (Categoria c : categorias) {
                         respuesta += "{\"idCategoria\":\"" + c.getIdCategoria() + "\",\"nombre\":\"" + c.getNombre() + "\"},";
-                    }
-                    respuesta = respuesta.substring(0, respuesta.length() - 1).concat("]");
-                    break;
-
-                // En caso de que pida llenar el carousel
-                case "carousel":
-                    productodao = DAOFactory.getDAOFactory().getProductoDAO();
-                    where = "WHERE Oferta = 's' GROUP BY IdProducto LIMIT 5 ";
-                    productos = productodao.getProductos(where);
-                    // Monto el JSON que mandaré de respuesta con la informacion que me viene de la base de datos
-                    respuesta = "[";
-                    for (Producto p : productos) {
-                        respuesta += "{\"idProducto\":\"" + p.getIdProducto() + "\",\"denominacion\":\"" + p.getDenominacion() + "\",\"precio\":" + p.getPrecioUnitario() + ",\"imagen\":\"" + p.getImagenes().get(0).getImagen() + "\"},";
-                    }
-                    respuesta = respuesta.substring(0, respuesta.length() - 1).concat("]");
-                    break;
-                case "masVendidos":
-                    productodao = DAOFactory.getDAOFactory().getProductoDAO();
-                    where = "inner join lineaspedidos as l using(IdProducto) group by IdProducto limit 6";
-                    productos = productodao.getProductos(where);
-                    // Monto el JSON que mandaré de respuesta con la informacion que me viene de la base de datos
-                    respuesta = "[";
-                    for (Producto p : productos) {
-                        respuesta += "{\"idProducto\":\"" + p.getIdProducto() + "\",\"denominacion\":\"" + p.getDenominacion().replace("\"", " pulgadas") + "\",\"precio\":" + p.getPrecioUnitario() + ",\"imagen\":\"" + p.getImagenes().get(0).getImagen() + "\"},";
                     }
                     respuesta = respuesta.substring(0, respuesta.length() - 1).concat("]");
                     break;

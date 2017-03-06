@@ -38,7 +38,7 @@ public class Peticion extends HttpServlet {
             case "producto":
                 productodao = DAOFactory.getDAOFactory().getProductoDAO();
                 caractprodsdao = DAOFactory.getDAOFactory().getCaractProdsDAO();
-                where = "where IdProducto = " + request.getParameter("producto");
+                where = "where IdProducto = " + request.getParameter("producto") + " and p.FueraCatalogo = 'n'";
                 producto = productodao.getProductos(where).get(0);
                 producto = caractprodsdao.annadirCaracteristicas(producto);
                 salida = "jsp/producto.jsp";
@@ -48,50 +48,62 @@ public class Peticion extends HttpServlet {
                 productodao = DAOFactory.getDAOFactory().getProductoDAO();
                 switch (request.getParameter("campo")) {
                     case "oferta":
-                        where = "where Oferta = 's'";
+                        where = "where Oferta = 's' and FueraCatalogo = 'n'";
                         request.setAttribute("oferta", true);
                         break;
                     case "categoria":
-                        where = "where IdCategoria = '" + request.getParameter("categoria") + "'";
+                        where = "where IdCategoria = '" + request.getParameter("categoria") + "' and FueraCatalogo = 'n'";
                         request.setAttribute("categoriaBuscada", request.getParameter("categoria"));
                         break;
                     case "marca":
-                        where = "where IdMarca = '" + request.getParameter("marca") + "'";
+                        where = "where IdMarca = '" + request.getParameter("marca") + "' and FueraCatalogo = 'n'";
                         request.setAttribute("marcaBuscada", request.getParameter("marca"));
                         break;
                     case "simple":
-                        where = "where p.Denominacion like '%"+request.getParameter("nombre")+"%'";
+                        where = "where p.Denominacion like '%"+request.getParameter("nombre")+"%' and FueraCatalogo = 'n'";
                         break;
                     case "masVendidos":
-                        where = "inner join lineaspedidos as l using(IdProducto) group by IdProducto order by cantidad desc";
+                        where = "inner join lineaspedidos as l using(IdProducto) where FueraCatalogo = 'n' group by IdProducto order by cantidad desc";
                         break;
                     case "avanzada":
-                        where = "where ";
+                        where = "";
                         if(!request.getParameter("categoria").equals("-1")){
-                            where += "IdCategoria = '" + request.getParameter("categoria") + "'";
+                            where += "where IdCategoria = '" + request.getParameter("categoria") + "'";
                             request.setAttribute("categoriaBuscada", request.getParameter("categoria"));
                         }
                         if(!request.getParameter("marca").equals("-1")){
-                            if(!where.equals("where ")){
+                            if(!where.isEmpty()){
                                 where += " and ";
+                            }else{
+                                where = "where ";
                             }
                             where += "IdMarca = '" + request.getParameter("marca") + "'";
                             request.setAttribute("marcaBuscada", request.getParameter("marca"));
                         }
                         if(!request.getParameter("precio").equals("-1")){
-                            if(!where.equals("where ")){
+                            if(!where.isEmpty()){
                                 where += " and ";
+                            }else{
+                                where = "where ";
                             }
                             where += "PrecioUnitario < "+ request.getParameter("precio");
                             request.setAttribute("precioBuscado", request.getParameter("precio"));
                         }
                         if(request.getParameter("oferta")!=null){
-                            if(!where.equals("where ")){
+                            if(!where.isEmpty()){
                                 where += " and ";
+                            }else{
+                                where = "where ";
                             }
                             where += "Oferta = 's'";
                             request.setAttribute("oferta", true);
                         }
+                        if(!where.isEmpty()){
+                                where += " and ";
+                            }else{
+                                where = "where ";
+                            }
+                        where += "FueraCatalogo = 'n'";
                         break;
                 }
                 productos = productodao.getProductos(where);
